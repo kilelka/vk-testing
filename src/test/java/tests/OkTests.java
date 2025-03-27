@@ -29,7 +29,7 @@ public class OkTests {
     @Test
     void loginTest() {
         LoginPage loginPage = new LoginPage();
-        loginPage.openPage()
+        loginPage
                 .enterCredentials("логин", "пароль")
                 .clickLogin();
 
@@ -41,7 +41,7 @@ public class OkTests {
     @Test
     void goToFriendsSection() {
         LoginPage loginPage = new LoginPage();
-        loginPage.openPage()
+        loginPage
                 .enterCredentials("логин", "пароль")
                 .clickLogin();
 
@@ -56,7 +56,7 @@ public class OkTests {
     @Test
     void searchTest() {
         LoginPage loginPage = new LoginPage();
-        loginPage.openPage()
+        loginPage
                 .enterCredentials("логин", "пароль")
                 .clickLogin();
 
