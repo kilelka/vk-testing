@@ -1,24 +1,23 @@
 package pages;
 
-import com.codeborne.selenide.SelenideElement;
-
-import static com.codeborne.selenide.Selenide.*;
+import org.openqa.selenium.By;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 
 public class MainPage {
 
-    private final SelenideElement friendsTab = $x("//*[@id='hook_Block_Navigation']/div/div/div[4]/a");
-    private final SelenideElement searchInput = $x("//*[@id='toolbar_search']/toolbar-search/form/div/label/input");
+    private final By friendsTab = By.xpath("//a[contains(@class, 'nav-side') and contains(@href, 'friends')]");
+    private final By searchInput = By.xpath("//input[@type='text' and contains(@placeholder, 'Искать на сайте')]");
 
     public void checkFriendsButton() {
-        friendsTab.shouldBe(com.codeborne.selenide.Condition.visible);
+        $(friendsTab).shouldBe(visible);
     }
 
     public void clickFriends() {
-        friendsTab.click();
+        $(friendsTab).click();
     }
 
     public void search(String query) {
-        searchInput.setValue(query);
-        searchInput.pressEnter();
+        $(searchInput).setValue(query).pressEnter();
     }
 }
