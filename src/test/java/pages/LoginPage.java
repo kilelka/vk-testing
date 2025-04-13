@@ -10,6 +10,7 @@ public class LoginPage {
     private final By usernameInput = By.id("field_email");
     private final By passwordInput = By.id("field_password");
     private final By loginButton = By.cssSelector("input[type='submit']");
+    private final By loginError = By.xpath("//form//div[contains(text(), 'Неправильно указан логин и/или пароль')]");
 
     public LoginPage enterUsername(String username) {
         $(usernameInput).shouldBe(visible).setValue(username);
@@ -23,5 +24,9 @@ public class LoginPage {
 
     public void clickLogin() {
         $(loginButton).shouldBe(visible).click();
+    }
+
+    public void checkErrorVisible() {
+        $(loginError).shouldBe(visible);
     }
 }

@@ -1,29 +1,62 @@
 package tests;
 
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.*;
 import pages.FriendsPage;
 import pages.LoginPage;
 import pages.MainPage;
-
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@DisplayName("Тесты для раздела 'Друзья'")
+@Tag("friends")
 public class FriendsTests extends BaseTest {
 
-    @Test
-    void shouldNavigateToFriendsSection() {
+    private MainPage mainPage;
+    private FriendsPage friendsPage;
+
+    @BeforeEach
+    void login() {
         new LoginPage()
                 .enterUsername(USERNAME)
                 .enterPassword(PASSWORD)
                 .clickLogin();
 
-        MainPage mainPage = new MainPage();
-        mainPage.clickFriends();
+        mainPage = new MainPage();
+        friendsPage = new FriendsPage();
+    }
 
-        FriendsPage friendsPage = new FriendsPage();
-        friendsPage.checkPossibleFriendsTabVisible();
+    @Nested
+    @DisplayName("Навигация")
+    class NavigationTests {
 
-        String tabText = friendsPage.getPossibleFriendsTabText();
-        assertTrue(tabText.contains("Возможные друзья"),
-                "Ожидали текст 'Возможные друзья', но получили: " + tabText);
+        @Test
+        @DisplayName("Переход в раздел 'Друзья'")
+        @Timeout(20)
+        void shouldNavigateToFriendsSection() {
+            mainPage.clickFriends();
+            friendsPage.checkPossibleFriendsTabVisible();
+
+            String tabText = friendsPage.getPossibleFriendsTabText();
+
+            assertAll("Проверки вкладки",
+                    () -> assertTrue(tabText.contains("Возможные друзья"),
+                            "Ожидали текст 'Возможные друзья', но получили: " + tabText)
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("Поиск")
+    class SearchTests {
+
+        @Test
+        @DisplayName("Поиск друга по имени")
+        @Timeout(40)
+        void shouldSearchFriendByName() {
+            mainPage.clickFriends();
+            friendsPage.search("Иван Иванов");
+            friendsPage.checkSearchResults();
+        }
     }
 }
