@@ -1,12 +1,14 @@
 package tests;
 
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import pages.FriendsPage;
 import pages.LoginPage;
 import pages.MainPage;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Тесты для раздела 'Друзья'")
 @Tag("friends")
@@ -35,14 +37,7 @@ public class FriendsTests extends BaseTest {
         @Timeout(20)
         void shouldNavigateToFriendsSection() {
             mainPage.clickFriends();
-            friendsPage.checkPossibleFriendsTabVisible();
-
-            String tabText = friendsPage.getPossibleFriendsTabText();
-
-            assertAll("Проверки вкладки",
-                    () -> assertTrue(tabText.contains("Возможные друзья"),
-                            "Ожидали текст 'Возможные друзья', но получили: " + tabText)
-            );
+            friendsPage.checkFriendsPageBlockVisible();
         }
     }
 

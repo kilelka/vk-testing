@@ -6,9 +6,8 @@ import static com.codeborne.selenide.Condition.visible;
 
 public class SearchPage {
 
-    private final By searchInput = By.cssSelector("#hook_Block_SearchMRB portal-search label");
-
+    private static final By SEARCH_INPUT = By.cssSelector("portal-search label input");
     public void checkInputVisible() {
-        $(searchInput).shouldBe(visible);
+        $(SEARCH_INPUT).shouldBe(visible.because("Поле поиска должно быть видно на странице поиска"));
     }
 }

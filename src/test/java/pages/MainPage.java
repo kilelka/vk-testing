@@ -1,28 +1,29 @@
 package pages;
 
 import org.openqa.selenium.By;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class MainPage {
 
-    private final By friendsTab = By.xpath("//a[contains(@class, 'nav-side') and contains(@href, 'friends')]");
-    private final By searchInput = By.xpath("//input[@type='text' and contains(@placeholder, 'Искать на сайте')]");
-    private By toolbar = By.id("topPanel");
+    private static final By FRIENDS_TAB = By.cssSelector(".nav-side a[href*='friends']");
+    private static final By SEARCH_INPUT = By.cssSelector("input[placeholder*='Искать на сайте']");
+    private static final By TOOLBAR = By.id("topPanel");
 
     public void checkFriendsButton() {
-        $(friendsTab).shouldBe(visible);
+        $(FRIENDS_TAB).shouldBe(visible.because("Кнопка перехода в друзья должна быть видна"));
     }
 
     public void clickFriends() {
-        $(friendsTab).click();
+        $(FRIENDS_TAB).click();
     }
 
     public void search(String query) {
-        $(searchInput).setValue(query).pressEnter();
+        $(SEARCH_INPUT).setValue(query).pressEnter();
     }
 
     public void checkToolbarVisible() {
-        $(toolbar).shouldBe(visible);
+        $(TOOLBAR).shouldBe(visible.because("Тулбар должен быть виден на главной странице"));
     }
 }

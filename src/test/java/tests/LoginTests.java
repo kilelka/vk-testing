@@ -1,6 +1,7 @@
 package tests;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,29 +11,53 @@ import pages.MainPage;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@Tag("auth")
+@DisplayName("Тесты на логин")
 public class LoginTests extends BaseTest {
 
-    @DisplayName("Проверка логина с разными данными")
-    @Tag("auth")
-    @Timeout(30)
-    @ParameterizedTest(name = "Логин: [{0}], Пароль: [{1}] → Успешно: {2}")
-    @CsvSource({
-            "technopol43, technopolisPassword, true",
-            "wrongUser, wrongPass, false"
-    })
-    void loginTest(String username, String password, boolean shouldLoginSucceed) {
-        LoginPage loginPage = new LoginPage();
-        loginPage.enterUsername(username)
-                .enterPassword(password)
-                .clickLogin();
+    @Nested
+    @DisplayName("Позитивные сценарии логина")
+    class SuccessfulLoginTests {
 
-        if (shouldLoginSucceed) {
+        @ParameterizedTest(name = "Успешный логин: {0}")
+        @CsvSource({
+                "technopol43, technopolisPassword"
+        })
+        @DisplayName("Успешный логин с правильными данными")
+        @Timeout(30)
+        void successfulLoginTest(String username, String password) {
+            new LoginPage()
+                    .enterUsername(username)
+                    .enterPassword(password)
+                    .clickLogin();
+
             MainPage mainPage = new MainPage();
-            assertAll("Проверка успешного логина",
+            assertAll("Проверка успешного входа",
                     () -> mainPage.checkFriendsButton(),
                     () -> mainPage.checkToolbarVisible()
             );
-        } else {
+        }
+    }
+
+    @Nested
+    @DisplayName("Негативные сценарии логина")
+    class FailedLoginTests {
+
+        @ParameterizedTest(name = "Неуспешный логин: {0}")
+        @CsvSource({
+                "wrongUser, wrongPass",
+                "emptyUser, ''",
+                "'', emptyPass",
+                "'', ''"
+        })
+        @DisplayName("Ошибка логина при неправильных данных")
+        @Timeout(30)
+        void failedLoginTest(String username, String password) {
+            LoginPage loginPage = new LoginPage();
+            loginPage.enterUsername(username)
+                    .enterPassword(password)
+                    .clickLogin();
+
             loginPage.checkErrorVisible();
         }
     }
