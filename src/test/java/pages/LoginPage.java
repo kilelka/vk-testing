@@ -7,26 +7,26 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
 
-    private final By usernameInput = By.id("field_email");
-    private final By passwordInput = By.id("field_password");
-    private final By loginButton = By.cssSelector("input[type='submit']");
-    private final By loginError = By.xpath("//form//div[contains(text(), 'Неправильно указан логин и/или пароль')]");
+    private static final By USERNAME_INPUT = By.id("field_email");
+    private static final By PASSWORD_INPUT = By.id("field_password");
+    private static final By LOGIN_BUTTON = By.cssSelector("input[type='submit']");
+    private static final By LOGIN_ERROR = By.xpath(".//*[contains(@class, 'login_error')]");
 
     public LoginPage enterUsername(String username) {
-        $(usernameInput).shouldBe(visible).setValue(username);
+        $(USERNAME_INPUT).shouldBe(visible.because("Поле ввода имени пользователя должно быть видно")).setValue(username);
         return this;
     }
 
     public LoginPage enterPassword(String password) {
-        $(passwordInput).shouldBe(visible).setValue(password);
+        $(PASSWORD_INPUT).shouldBe(visible.because("Поле ввода пароля должно быть видно")).setValue(password);
         return this;
     }
 
     public void clickLogin() {
-        $(loginButton).shouldBe(visible).click();
+        $(LOGIN_BUTTON).shouldBe(visible.because("Кнопка входа должна быть видимой")).click();
     }
 
     public void checkErrorVisible() {
-        $(loginError).shouldBe(visible);
+        $(LOGIN_ERROR).shouldBe(visible.because("Должно отображаться сообщение об ошибке логина"));
     }
 }

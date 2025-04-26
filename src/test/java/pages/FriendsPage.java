@@ -1,38 +1,26 @@
 package pages;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-
-import java.time.Duration;
-
-import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class FriendsPage {
 
-    private final By possibleFriendsTab = By.xpath("//*[@id='hook_Block_UserFriendsMenu']//nav//a[contains(text(), 'Возможные друзья')]");
-    private final By searchInputField = By.xpath("//div[@id='hook_Block_UserFriendsMenu']//friend-search-input//label/input");
-    private final By searchResultBlock = By.xpath("//div[@id='hook_Block_MyFriendsFriendSearchPagingB']");
+    private static final By MY_FRIENDS_PAGE_BLOCK = By.id("hook_Block_MyFriendsNewPageMRB");
+    private static final By SEARCH_INPUT_FIELD = By.xpath(".//friend-search-input//input");
+    private static final By USER_FRIENDS_MENU_CONTENT = By.id("hook_Block_UserFriendsMenu");
 
-    public void checkPossibleFriendsTabVisible() {
-        $(possibleFriendsTab).shouldBe(visible);
-    }
-
-    public String getPossibleFriendsTabText() {
-        return $(possibleFriendsTab).getText();
+    public void checkFriendsPageBlockVisible() {
+        $(MY_FRIENDS_PAGE_BLOCK).shouldBe(visible.because("Блок 'Мои друзья' должен быть виден на странице друзей"));
     }
 
     public void search(String query) {
-        SelenideElement input = $(searchInputField);
-
-        input.click();
-        input.setValue(query);
-        input.pressEnter();
+        SelenideElement input = $(SEARCH_INPUT_FIELD);
+        input.shouldBe(visible.because("Поле поиска друзей должно быть видно")).setValue(query).pressEnter();
     }
 
     public void checkSearchResults() {
-        $(searchResultBlock).shouldBe(visible);
+        $(USER_FRIENDS_MENU_CONTENT).shouldBe(visible.because("Контент меню друзей должен быть виден"));
     }
 }
