@@ -1,5 +1,6 @@
 package tests;
 
+import models.UserCredentials;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -26,12 +27,12 @@ public class LoginTests extends BaseTest {
         @DisplayName("Успешный логин с правильными данными")
         @Timeout(30)
         void successfulLoginTest(String username, String password) {
-            new LoginPage()
-                    .enterUsername(username)
-                    .enterPassword(password)
-                    .clickLogin();
+            UserCredentials user = new UserCredentials(username, password);
 
-            MainPage mainPage = new MainPage();
+            new LoginPage()
+                    .login(user);
+
+            MainPage mainPage = new MainPage().load();
             assertAll("Проверка успешного входа",
                     () -> mainPage.checkFriendsButton(),
                     () -> mainPage.checkToolbarVisible()
@@ -53,12 +54,11 @@ public class LoginTests extends BaseTest {
         @DisplayName("Ошибка логина при неправильных данных")
         @Timeout(30)
         void failedLoginTest(String username, String password) {
-            LoginPage loginPage = new LoginPage();
-            loginPage.enterUsername(username)
-                    .enterPassword(password)
-                    .clickLogin();
+            UserCredentials user = new UserCredentials(username, password);
 
-            loginPage.checkErrorVisible();
+            new LoginPage()
+                    .login(user)
+                    .checkErrorVisible();
         }
     }
 }

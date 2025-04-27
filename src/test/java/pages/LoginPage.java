@@ -1,5 +1,7 @@
 package pages;
 
+import elements.InputField;
+import models.UserCredentials;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -12,13 +14,23 @@ public class LoginPage {
     private static final By LOGIN_BUTTON = By.cssSelector("input[type='submit']");
     private static final By LOGIN_ERROR = By.xpath(".//*[contains(@class, 'login_error')]");
 
+    private final InputField usernameInput = new InputField($(USERNAME_INPUT));
+    private final InputField passwordInput = new InputField($(PASSWORD_INPUT));
+
     public LoginPage enterUsername(String username) {
-        $(USERNAME_INPUT).shouldBe(visible.because("Поле ввода имени пользователя должно быть видно")).setValue(username);
+        usernameInput.setValue(username);
         return this;
     }
 
     public LoginPage enterPassword(String password) {
-        $(PASSWORD_INPUT).shouldBe(visible.because("Поле ввода пароля должно быть видно")).setValue(password);
+        passwordInput.setValue(password);
+        return this;
+    }
+
+    public LoginPage login(UserCredentials user) {
+        enterUsername(user.getUsername())
+                .enterPassword(user.getPassword())
+                .clickLogin();
         return this;
     }
 

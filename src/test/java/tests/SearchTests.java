@@ -1,38 +1,54 @@
 package tests;
 
+import models.UserCredentials;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import pages.LoginPage;
 import pages.MainPage;
 import pages.SearchPage;
 
+@DisplayName("Тесты поиска на странице")
+@Tag("search")
 public class SearchTests extends BaseTest {
 
-    @Test
-    @DisplayName("Поиск по запросу")
-    void shouldReturnSearchResults() {
+    private MainPage mainPage;
+
+    @BeforeEach
+    void login() {
+        UserCredentials user = new UserCredentials(USERNAME, PASSWORD);
+
         new LoginPage()
-                .enterUsername(USERNAME)
-                .enterPassword(PASSWORD)
-                .clickLogin();
+                .login(user);
 
-        new MainPage().search("Тестовый запрос");
-
-        new SearchPage().checkInputVisible();
+        mainPage = new MainPage().load();
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("data.SearchDataProvider#searchQueries")
+    @DisplayName("Поиск по запросу")
+    void shouldReturnSearchResults(String query) {
+        mainPage.search(query);
+
+        new SearchPage()
+                .enterSearchQuery(query)
+                .submitSearch()
+                .checkInputVisible();
+    }
+
     @Disabled("Тест временно отключен")
+    @Test
     @DisplayName("Поиск с пустым запросом")
     void shouldHandleEmptySearch() {
-        new LoginPage()
-                .enterUsername(USERNAME)
-                .enterPassword(PASSWORD)
-                .clickLogin();
+        mainPage.search("");
 
-        new MainPage().search("");
-
-        new SearchPage().checkInputVisible();
+        new SearchPage()
+                .enterSearchQuery("")
+                .submitSearch()
+                .checkInputVisible();
     }
 }

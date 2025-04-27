@@ -1,5 +1,6 @@
 package tests;
 
+import models.UserCredentials;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -19,13 +20,12 @@ public class FriendsTests extends BaseTest {
 
     @BeforeEach
     void login() {
-        new LoginPage()
-                .enterUsername(USERNAME)
-                .enterPassword(PASSWORD)
-                .clickLogin();
+        UserCredentials user = new UserCredentials(USERNAME, PASSWORD);
 
-        mainPage = new MainPage();
-        friendsPage = new FriendsPage();
+        new LoginPage()
+                .login(user);
+
+        mainPage = new MainPage().load();
     }
 
     @Nested
@@ -36,8 +36,8 @@ public class FriendsTests extends BaseTest {
         @DisplayName("Переход в раздел 'Друзья'")
         @Timeout(20)
         void shouldNavigateToFriendsSection() {
-            mainPage.clickFriends();
-            friendsPage.checkFriendsPageBlockVisible();
+            friendsPage = mainPage.clickFriends();
+            friendsPage.load();
         }
     }
 
@@ -49,9 +49,10 @@ public class FriendsTests extends BaseTest {
         @DisplayName("Поиск друга по имени")
         @Timeout(40)
         void shouldSearchFriendByName() {
-            mainPage.clickFriends();
-            friendsPage.search("Иван Иванов");
-            friendsPage.checkSearchResults();
+            friendsPage = mainPage.clickFriends();
+            friendsPage.load()
+                    .search("Иван Иванов")
+                    .checkSearchResults();
         }
     }
 }
