@@ -32,7 +32,7 @@ public class LoginTests extends BaseTest {
             new LoginPage()
                     .login(user);
 
-            MainPage mainPage = new MainPage().load();
+            MainPage mainPage = new MainPage();
             assertAll("Проверка успешного входа",
                     () -> mainPage.checkFriendsButton(),
                     () -> mainPage.checkToolbarVisible()

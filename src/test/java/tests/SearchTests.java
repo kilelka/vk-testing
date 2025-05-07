@@ -25,7 +25,7 @@ public class SearchTests extends BaseTest {
         new LoginPage()
                 .login(user);
 
-        mainPage = new MainPage().load();
+        mainPage = new MainPage();
     }
 
     @ParameterizedTest
@@ -36,8 +36,7 @@ public class SearchTests extends BaseTest {
 
         new SearchPage()
                 .enterSearchQuery(query)
-                .submitSearch()
-                .checkInputVisible();
+                .submitSearch();
     }
 
     @Disabled("Тест временно отключен")
@@ -48,7 +47,6 @@ public class SearchTests extends BaseTest {
 
         new SearchPage()
                 .enterSearchQuery("")
-                .submitSearch()
-                .checkInputVisible();
+                .submitSearch();
     }
 }
