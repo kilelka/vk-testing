@@ -1,23 +1,28 @@
 package pages;
 
+import components.LoadablePage;
 import org.openqa.selenium.By;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
-public class MainPage {
+public class MainPage extends LoadablePage<MainPage> {
 
     private static final By FRIENDS_TAB = By.cssSelector(".nav-side a[href*='friends']");
     private static final By SEARCH_INPUT = By.cssSelector("input[placeholder*='Искать на сайте']");
     private static final By TOOLBAR = By.id("topPanel");
 
-    public MainPage load() {
+    public MainPage() {
+        super();
+    }
+
+    @Override
+    protected void checkLoad() {
         $(FRIENDS_TAB).shouldBe(visible.because("Кнопка перехода в друзья должна быть видна"));
         $(TOOLBAR).shouldBe(visible.because("Тулбар должен быть виден на главной странице"));
-        return this;
     }
 
     public FriendsPage clickFriends() {
-        $(FRIENDS_TAB).click();
+        $(FRIENDS_TAB).shouldBe(visible.because("Вкладка 'Друзья' должна быть видна перед кликом")).click();
         return new FriendsPage();
     }
 

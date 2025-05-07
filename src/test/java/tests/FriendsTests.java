@@ -25,7 +25,7 @@ public class FriendsTests extends BaseTest {
         new LoginPage()
                 .login(user);
 
-        mainPage = new MainPage().load();
+        mainPage = new MainPage();
     }
 
     @Nested
@@ -37,7 +37,6 @@ public class FriendsTests extends BaseTest {
         @Timeout(20)
         void shouldNavigateToFriendsSection() {
             friendsPage = mainPage.clickFriends();
-            friendsPage.load();
         }
     }
 
@@ -50,8 +49,7 @@ public class FriendsTests extends BaseTest {
         @Timeout(40)
         void shouldSearchFriendByName() {
             friendsPage = mainPage.clickFriends();
-            friendsPage.load()
-                    .search("Иван Иванов")
+            friendsPage.search("Иван Иванов")
                     .checkSearchResults();
         }
     }
